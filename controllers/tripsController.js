@@ -33,7 +33,7 @@ exports.getTripById = async (req, res) => {
 exports.createTrip = async (req, res) => {
   const { title, description, country, city, start_date, end_date } =req.body;
   const userId = req.user.userId;
-  await Trip.create({
+  const trip = await Trip.create({
     title,
     description,
     country,
@@ -43,7 +43,7 @@ exports.createTrip = async (req, res) => {
     userId,
   });
   // await redisClient.del("trips:all");
-  res.status(201).json({ message: "Trip added successfully" });
+  res.status(201).json({ message: "Trip added successfully", trip });
 };
 
 exports.updateTrip = async (req, res) => {

@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: trips
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  backend:
+    build: .
+    environment:
+      PORT: 3000
+      DB_HOST: mysql
+      DB_USER: testuser
+      DB_PASS: testpass
+      DB_NAME: trips
+      JWT_SECRET: supersecret
+      WINDOW_MINUTES: 15
+      MAX_LOGIN_ATTEMPTS: 5
+    depends_on:
+      - mysql
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command: npm start
+
+volumes:
+  mysql-data:
